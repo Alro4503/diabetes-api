@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from app.models import PatientData, PredictionResult, ChatMessage, ChatResponse
 from app.predict import predict
 from app.chat import chat
+from fastapi.middleware.cors import CORSMiddleware
 
 # --- App init ---
 app = FastAPI(
@@ -30,3 +31,10 @@ def chat_endpoint(message: ChatMessage):
         return chat(message)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
